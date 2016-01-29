@@ -1,0 +1,8 @@
+Boneco Inicio	= 1abc9c [TURQUOISE]
+Totem de Ritual = f1c40f [SUN FLOWER]
+Fantasma Inicio = 2ecc71 [EMERALD]
+Parede		= e67e22 [CARROT]
+Chão 		= 3498db [PETER RIVER]
+Armadilhas 	= e74c3c [ALIZARIN]
+Items do Ritual = 9b59b6 [AMETHYST]
+Tile Fundo 	= ecf0f1 [CLOUDS]
