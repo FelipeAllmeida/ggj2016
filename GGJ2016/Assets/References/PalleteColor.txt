@@ -1,13 +1,14 @@
 Start 		= FF00FF [MAGENTA]
 Ritual Totem	= 006600 [VERDE ESCURO]
 Start Phantom	= 00FFFF [CIANO]
-Wall 1		= AAAAAA [CINZA]
-Wall 2 (FUNDO)	= 000000 [PRETO]
+Wall 1 #Externa	= AAAAAA [CINZA]
+Wall 2 #Interna = 000000 [PRETO]
 Normal Ground	= FFFFFF [BRANCO]
 Slow Ground	= FFFF00 [AMARELO]
 Fast Ground 	= 00FF00 [VERDE]
 Traps	 	= FF0000 [VERMELHO]
 Items		= 8000FF [ROXO]
 Ports		= FF6600 [LARANJA]
+Portals		= 704000 [MARROM]
 
 Resolution 	= 64x36
