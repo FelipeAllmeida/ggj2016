@@ -4,15 +4,22 @@ using System.Collections.Generic;
 
 public class LevelGenerator : MonoBehaviour
 {
+    #region Const Data
+
     [SerializeField] public const int Width = 32;
     [SerializeField] public const int Height = 24;
     public const int TileCount = Width * Height;
+
+    #endregion
+
+    #region PublicData
     public LevelData[] LevelData;
     public TileData[] TileData;
     List<GameObject> mapTileList;
     public int CurrentLevel { private set; get; }
     public int DebugLevel = 0;
     public float nextMapTime = 0;
+    #endregion
 
     void Start()
     {
