@@ -1,17 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
     #region Public Data
+    public Action onDeath;
     #endregion
 
     #region Private Data
-
-    [SerializeField] private float _moveSpeed = 0.25f;
+    [SerializeField] private const float _constMoveSpeed = 10f;
+    private float _moveSpeed = 10f;
     [SerializeField] private GameObject _ritualItem;
     [SerializeField] private TotemController _totem;
-
+    private float _switchTime = 0;
     #endregion
 
     void Start()
@@ -25,6 +27,31 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        _moveSpeed = _constMoveSpeed;
+        LayerMask __mask = 1 << LayerMask.NameToLayer("Slow");
+        if (Physics.Raycast(transform.position, Vector3.down,3f, __mask))
+        {
+            _moveSpeed *= 0.5f;
+        }
+         __mask = 1 << LayerMask.NameToLayer("Fast");
+        if (Physics.Raycast(transform.position, Vector3.down, 3f, __mask))
+        {
+            _moveSpeed += 10f;
+        }
+        if (Time.time > _switchTime)
+        {
+            __mask = 1 << LayerMask.NameToLayer("Button");
+            if (Physics.Raycast(transform.position, Vector3.down, 3f, __mask))
+            {
+                Spikes[] __spikes = FindObjectsOfType<Spikes>();
+                foreach (Spikes p_spikes in __spikes)
+                {
+                    p_spikes.Toggle();
+                }
+                _switchTime = Time.time + 0.25f;
+
+            }
+        }
         DetectInputs();
         CheckCollision();
     }
@@ -59,35 +86,19 @@ public class PlayerController : MonoBehaviour
             FindObjectOfType<LevelGenerator>().NextLevel();
             Destroy(this.gameObject);
         }
-        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D))
-        {
-            transform.Translate((_moveSpeed / 2) * Time.deltaTime, 0f, (_moveSpeed / 2) * Time.deltaTime);
-        }
-        else if (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.S))
-        {
-            transform.Translate((_moveSpeed / 2) * Time.deltaTime, 0f, (-_moveSpeed / 2) * Time.deltaTime);
-        }
-        else if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.A))
-        {
-            transform.Translate((-_moveSpeed / 2) * Time.deltaTime, 0f, (-_moveSpeed / 2) * Time.deltaTime);
-        }
-        else if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.W))
-        {
-            transform.Translate((-_moveSpeed / 2) * Time.deltaTime, 0f, (_moveSpeed / 2) * Time.deltaTime);
-        }
-        else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
             transform.Translate(0f, 0f, _moveSpeed * Time.deltaTime);
         }
-        else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
             transform.Translate(0f, 0f, -_moveSpeed * Time.deltaTime);
         }
-        else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             transform.Translate(-_moveSpeed * Time.deltaTime, 0f, 0f);
         }
-        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
             transform.Translate(_moveSpeed * Time.deltaTime, 0f, 0f);
         }
@@ -98,6 +109,7 @@ public class PlayerController : MonoBehaviour
         if (p_collider.gameObject.tag == "Ghost")
         {
             Destroy(p_collider.gameObject);
+            onDeath();
             Destroy(this.gameObject);
         }
     }
