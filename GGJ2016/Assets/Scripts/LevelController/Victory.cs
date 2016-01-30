@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Victory : MonoBehaviour
 {
-
     private float lightOffTime;
     public Light pLight;
 
@@ -12,8 +11,8 @@ public class Victory : MonoBehaviour
     {
         lightOffTime = Time.time + 0.10f;
 
-        Rigidbody[] bodies = GetComponentsInChildren<Rigidbody>();
-        foreach (Rigidbody body in bodies)
+        Rigidbody[] __bodies = GetComponentsInChildren<Rigidbody>();
+        foreach (Rigidbody body in __bodies)
         {
             body.AddForce(new Vector3(Random.Range(-0.5f, 0.5f), 1f, Random.Range(-0.5f, 0.5f)) * 30f, ForceMode.Impulse);
             body.AddTorque(new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * 100f);
