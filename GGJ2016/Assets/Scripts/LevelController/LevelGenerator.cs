@@ -8,6 +8,7 @@ public class LevelGenerator : MonoBehaviour
 
     [SerializeField] public const int Width = 32;
     [SerializeField] public const int Height = 24;
+    
     public const int TileCount = Width * Height;
 
     #endregion
@@ -19,7 +20,9 @@ public class LevelGenerator : MonoBehaviour
     public int CurrentLevel { private set; get; }
     public int DebugLevel = 0;
     public float nextMapTime = 0;
+    public int itemQuantity = 0;
     #endregion
+
 
     void Start()
     {
@@ -34,8 +37,9 @@ public class LevelGenerator : MonoBehaviour
 
     public void NextLevel(int increase = 1)
     {
+        itemQuantity = 0;
         CurrentLevel += increase;
-        nextMapTime = Time.time + 1f;
+        GenerateLevel(CurrentLevel);
 
     }
 
@@ -67,10 +71,12 @@ public class LevelGenerator : MonoBehaviour
                 Color __color = __levelData.image.GetPixel(x, z);
                 foreach (TileData tile in TileData)
                 {
-                    Debug.Log("Color unity: " + __color + "/Color image: " + tile.colour);
                     if (__color == tile.colour)
                     {
-                        Debug.Log("entrou?");
+                        if (tile.name == "RitualItemTile")
+                        {
+                            itemQuantity++;
+                        }
                         GameObject newTile = Instantiate(tile.gameObject, origin + new Vector3(x * 2, 0, z * 2), Quaternion.identity) as GameObject;
                         Object.Destroy(newTile.GetComponent<TileData>());
                         newTile.transform.parent = transform;
@@ -81,6 +87,7 @@ public class LevelGenerator : MonoBehaviour
                 }
             }
         }
+
     }
 
     void Update()
