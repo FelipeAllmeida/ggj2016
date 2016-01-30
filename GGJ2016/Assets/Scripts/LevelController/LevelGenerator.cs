@@ -51,24 +51,26 @@ public class LevelGenerator : MonoBehaviour
     private void GenerateLevel(int level)
     {
         EraseLevel();
-        int newLevel = level;
+        int __newLevel = level;
 
-        if (newLevel >= LevelData.Length)
+        if (__newLevel >= LevelData.Length)
         {
-            Application.LoadLevel("Results");
+            Application.LoadLevel("results");
             return;
         }
-        LevelData levelData = LevelData[newLevel];
+        LevelData __levelData = LevelData[__newLevel];
         Vector3 origin = new Vector3(Width * -0.5f + 0.5f, Height * -0.5f + 0.5f, 0) + transform.position;
         for (int z = 0; z < Height; z++)
         {
             for (int x = 0; x < Width; x++)
             {
-                Color color = levelData.image.GetPixel(x, z);
+                Color __color = __levelData.image.GetPixel(x, z);
                 foreach (TileData tile in TileData)
                 {
-                    if (color == tile.colour)
+                    Debug.Log("Color unity: " + __color + "/Color image: " + tile.colour);
+                    if (__color == tile.colour)
                     {
+                        Debug.Log("entrou?");
                         GameObject newTile = Instantiate(tile.gameObject, origin + new Vector3(x * 2, 0, z * 2), Quaternion.identity) as GameObject;
                         Object.Destroy(newTile.GetComponent<TileData>());
                         newTile.transform.parent = transform;
