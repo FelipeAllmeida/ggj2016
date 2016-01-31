@@ -13,11 +13,11 @@ public class Door : MonoBehaviour
 
 	public void Open()
     {
-        this.transform.localPosition = new Vector3(0f, -10f, 0f);
+        this.transform.position = new Vector3(0f, -20f, 0f);
     }
 
     public void Reset()
     {
-        this.transform.localPosition = transform.localPosition;
+        this.transform.position = transform.localPosition;
     }
 }

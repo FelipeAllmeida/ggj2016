@@ -43,8 +43,29 @@ public class LevelGenerator : MonoBehaviour
 
     }
 
-    public void EraseSpawns()
+    public void ResetLevel()
     {
+
+        TotemController[] __totems = FindObjectsOfType<TotemController>();
+        foreach(TotemController __totem in __totems)
+        {
+            Destroy(__totem.gameObject);
+        }
+        GameObject[] __keySpawners = GameObject.FindGameObjectsWithTag("KeySpawner");
+        foreach (GameObject __spawner in __keySpawners)
+        {
+            __spawner.GetComponent<Spawner>().isActive = true;
+        }
+        GameObject[] __keys = GameObject.FindGameObjectsWithTag("Key");
+        foreach(GameObject __key in __keys)
+        {
+            Destroy(__key);
+        }
+        GameObject[] __itens = GameObject.FindGameObjectsWithTag("RitualItem");
+        foreach (GameObject __item in __itens)
+        {
+            Destroy(__item);
+        }
         Door[] __doors = FindObjectsOfType<Door>();
         foreach(Door __door in __doors)
         {

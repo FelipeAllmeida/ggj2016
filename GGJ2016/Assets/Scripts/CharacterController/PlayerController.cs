@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
 
     #region Private Data
     [SerializeField] private const float _constMoveSpeed = 10f;
-    private float _moveSpeed = 10f;
+    private float _moveSpeed = 12f;
     [SerializeField] private GameObject _storedItem;
     [SerializeField] private int _keyQuantity = 0;
     [SerializeField] private TotemController _totem;
@@ -76,19 +76,6 @@ public class PlayerController : MonoBehaviour
                 __hit.gameObject.transform.localPosition = new Vector3(0f, 1f, 0f);
                 __hit.tag = "ToDeliverItem";
             }
-            if (__hit.tag == "Key")
-            {
-                Destroy(__hit.gameObject);
-                _keyQuantity++;
-            }
-            if (__hit.tag == "Door")
-            {
-                if (_keyQuantity > 0)
-                {
-                    __hit.GetComponent<Door>().Open();
-                    _keyQuantity--;
-                }
-            }
             if (__hit.tag == "Totem")
             {
                 if (_storedItem != null)
@@ -99,7 +86,7 @@ public class PlayerController : MonoBehaviour
             }
             if (__hit.tag == "Trap")
             {
-                FindObjectOfType<LevelGenerator>().EraseSpawns();
+                FindObjectOfType<LevelGenerator>().ResetLevel();
                 onDeath();
                 Destroy(this.gameObject);
             }
@@ -110,22 +97,40 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.R))
         {
+            FindObjectOfType<LevelGenerator>().ResetLevel();
             FindObjectOfType<LevelGenerator>().NextLevel();
             Destroy(this.gameObject);
         }
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        float __angularMovement = ((_moveSpeed * 3) / 4);
+        if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) && (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)))
+        {
+            transform.Translate(__angularMovement * Time.deltaTime, 0f, __angularMovement * Time.deltaTime);
+        }
+        else if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)))
+        {
+            transform.Translate(-__angularMovement * Time.deltaTime, 0f, __angularMovement * Time.deltaTime);
+        }
+        else if ((Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) && (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)))
+        {
+            transform.Translate(__angularMovement * Time.deltaTime, 0f, -__angularMovement * Time.deltaTime);
+        }
+        else if ((Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)))
+        {
+            transform.Translate(-__angularMovement * Time.deltaTime, 0f, -__angularMovement * Time.deltaTime);
+        }
+        else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
             transform.Translate(0f, 0f, _moveSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
             transform.Translate(0f, 0f, -_moveSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             transform.Translate(-_moveSpeed * Time.deltaTime, 0f, 0f);
         }
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
             transform.Translate(_moveSpeed * Time.deltaTime, 0f, 0f);
         }
@@ -136,7 +141,7 @@ public class PlayerController : MonoBehaviour
     {
         if (p_collider.gameObject.tag == "Ghost")
         {
-            FindObjectOfType<LevelGenerator>().EraseSpawns();
+            FindObjectOfType<LevelGenerator>().ResetLevel();
             onDeath();
             Destroy(this.gameObject);
         }

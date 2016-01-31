@@ -36,10 +36,19 @@ public class TotemController : MonoBehaviour
         spinnerTransform.transform.Rotate(new Vector3(0f, -5f, 0f));
         if (_listRitualItem.Count >= _itensQuantity)
         {
-            onVictory();
-            FindObjectOfType<LevelGenerator>().NextLevel();
-            Destroy(this.gameObject);
+                onVictory();
+                FindObjectOfType<LevelGenerator>().NextLevel();
+                Destroy(this.gameObject);
         }
+    }
+
+    public void Reset()
+    {
+        for (int i = 0; i < _listRitualItem.Count; i ++)
+        {
+            Destroy(_listRitualItem[i]);
+        }
+        _listRitualItem.Clear();
     }
 
     public void AddRitualItem(GameObject p_gameObject)

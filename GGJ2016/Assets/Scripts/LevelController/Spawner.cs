@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Spawner : MonoBehaviour
 {
-    private GameObject spawn;
+    public GameObject spawn;
     public GameObject prefab;
     public Transform spawnLocation;
     public bool isActive = true;
