@@ -13,7 +13,8 @@ public class PlayerController : MonoBehaviour
     private float _moveSpeed = 10f;
     [SerializeField] private GameObject _ritualItem;
     [SerializeField] private TotemController _totem;
-    private float _switchTime = 0;
+    private float _switchTime = 0.25f;
+    private bool _buttonActivated = false;
     #endregion
 
     void Start()
@@ -38,14 +39,15 @@ public class PlayerController : MonoBehaviour
         {
             _moveSpeed += 10f;
         }
-        if (Time.time > _switchTime)
+        if (Time.time > _switchTime && _buttonActivated == false)
         {
             __mask = 1 << LayerMask.NameToLayer("Button");
             if (Physics.Raycast(transform.position, Vector3.down, 3f, __mask))
             {
+                _buttonActivated = true;
                 Spikes[] __spikes = FindObjectsOfType<Spikes>();
                 foreach (Spikes p_spikes in __spikes)
-                {
+                {                    
                     p_spikes.Toggle();
                 }
                 _switchTime = Time.time + 0.25f;
@@ -76,6 +78,12 @@ public class PlayerController : MonoBehaviour
                     _ritualItem = null;
                 }
             }
+            if (__hit.tag == "Trap")
+            {
+                FindObjectOfType<LevelGenerator>().EraseSpawns();
+                onDeath();
+                Destroy(this.gameObject);
+            }
         }
     }
 
@@ -104,13 +112,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
     void OnTriggerEnter(Collider p_collider)
     {
         if (p_collider.gameObject.tag == "Ghost")
         {
-            Destroy(p_collider.gameObject);
+            FindObjectOfType<LevelGenerator>().EraseSpawns();
             onDeath();
             Destroy(this.gameObject);
         }
     }
+
+    
 }

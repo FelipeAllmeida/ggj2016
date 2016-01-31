@@ -43,8 +43,23 @@ public class LevelGenerator : MonoBehaviour
 
     }
 
+    public void EraseSpawns()
+    {
+        Spikes[] __spikes = FindObjectsOfType<Spikes>();
+        foreach (Spikes __spike in __spikes)
+        {
+            __spike.Reset();
+        }
+        GhostController[] __ghosts = FindObjectsOfType<GhostController>();
+        foreach (GhostController __ghost in __ghosts)
+        {
+            Destroy(__ghost.gameObject);
+        }
+    }
+
     private void EraseLevel()
     {
+        
         foreach (GameObject obj in mapTileList)
         {
             Destroy(obj);

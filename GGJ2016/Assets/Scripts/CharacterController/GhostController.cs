@@ -3,8 +3,7 @@ using System.Collections;
 
 public class GhostController : MonoBehaviour
 {
-    public float moveSpeed = 1f;
-    public float speedModifier = 0.2f;
+    private float moveSpeed = 7f;
 
     [SerializeField] private TotemController _totem;
     private Transform _playerTransform;
@@ -22,7 +21,6 @@ public class GhostController : MonoBehaviour
             _playerTransform = GameObject.Find("Player(Clone)").transform;
             if (_playerTransform != null) _canFollow = true;
         });
-        speedBoost = speedModifier * FindObjectOfType<LevelGenerator>().CurrentLevel;
     }
 
     void Update()
