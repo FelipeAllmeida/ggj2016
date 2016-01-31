@@ -53,6 +53,7 @@ public class TotemController : MonoBehaviour
 
     public void AddRitualItem(GameObject p_gameObject)
     {
+        AudioController.instance.PlayGetItem();
         _listRitualItem.Add(p_gameObject);
         p_gameObject.transform.SetParent(spinnerTransform);
         //p_gameObject.transform.localPosition()

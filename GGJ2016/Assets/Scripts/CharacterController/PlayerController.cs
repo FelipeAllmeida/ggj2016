@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
         _totem = FindObjectOfType<TotemController>();
         _totem.onVictory += delegate
         {
+            AudioController.instance.PlayVictory();
             Destroy(this.gameObject);
         };
     }
@@ -50,6 +51,7 @@ public class PlayerController : MonoBehaviour
             __mask = 1 << LayerMask.NameToLayer("Button");
             if (Physics.Raycast(transform.position, Vector3.down, 3f, __mask))
             {
+                AudioController.instance.PlayButton();
                 _buttonActivated = true;
                 Spikes[] __spikes = FindObjectsOfType<Spikes>();
                 foreach (Spikes p_spikes in __spikes)
@@ -71,6 +73,7 @@ public class PlayerController : MonoBehaviour
         {
             if (__hit.tag == "RitualItem" && _storedItem == null)
             {
+                AudioController.instance.PlayGetItem();
                 _storedItem = __hit.gameObject;
                 __hit.gameObject.transform.SetParent(transform);
                 __hit.gameObject.transform.localPosition = new Vector3(0f, 1f, 0f);
@@ -87,6 +90,7 @@ public class PlayerController : MonoBehaviour
             if (__hit.tag == "Trap")
             {
                 FindObjectOfType<LevelGenerator>().ResetLevel();
+                AudioController.instance.PlayKill();
                 onDeath();
                 Destroy(this.gameObject);
             }

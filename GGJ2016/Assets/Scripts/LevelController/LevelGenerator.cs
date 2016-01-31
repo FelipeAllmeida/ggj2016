@@ -33,6 +33,8 @@ public class LevelGenerator : MonoBehaviour
         }
         CurrentLevel = 0;
         GenerateLevel(CurrentLevel);
+        AudioController.instance.Initialize();
+        AudioController.instance.PlayMain();
     }
 
     public void NextLevel(int increase = 1)
