@@ -11,7 +11,8 @@ public class PlayerController : MonoBehaviour
     #region Private Data
     [SerializeField] private const float _constMoveSpeed = 10f;
     private float _moveSpeed = 10f;
-    [SerializeField] private GameObject _ritualItem;
+    [SerializeField] private GameObject _storedItem;
+    [SerializeField] private int _keyQuantity = 0;
     [SerializeField] private TotemController _totem;
     private float _switchTime = 0.25f;
     private bool _buttonActivated = false;
@@ -39,6 +40,11 @@ public class PlayerController : MonoBehaviour
         {
             _moveSpeed += 10f;
         }
+        __mask = 1 << LayerMask.NameToLayer("Ground");
+        if (Physics.Raycast(transform.position, Vector3.down, 3f, __mask))
+        {
+            _buttonActivated = false;
+        }
         if (Time.time > _switchTime && _buttonActivated == false)
         {
             __mask = 1 << LayerMask.NameToLayer("Button");
@@ -63,19 +69,32 @@ public class PlayerController : MonoBehaviour
         Collider[] __hits = Physics.OverlapSphere(transform.position, 1f);
         foreach (Collider __hit in __hits)
         {
-            if (__hit.tag == "RitualItem" && _ritualItem == null)
+            if (__hit.tag == "RitualItem" && _storedItem == null)
             {
-                _ritualItem = __hit.gameObject;
+                _storedItem = __hit.gameObject;
                 __hit.gameObject.transform.SetParent(transform);
                 __hit.gameObject.transform.localPosition = new Vector3(0f, 1f, 0f);
                 __hit.tag = "ToDeliverItem";
             }
+            if (__hit.tag == "Key")
+            {
+                Destroy(__hit.gameObject);
+                _keyQuantity++;
+            }
+            if (__hit.tag == "Door")
+            {
+                if (_keyQuantity > 0)
+                {
+                    __hit.GetComponent<Door>().Open();
+                    _keyQuantity--;
+                }
+            }
             if (__hit.tag == "Totem")
             {
-                if (_ritualItem != null)
+                if (_storedItem != null)
                 {
-                    __hit.GetComponent<TotemController>().AddRitualItem(_ritualItem);
-                    _ritualItem = null;
+                    __hit.GetComponent<TotemController>().AddRitualItem(_storedItem);
+                    _storedItem = null;
                 }
             }
             if (__hit.tag == "Trap")

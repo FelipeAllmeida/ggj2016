@@ -45,6 +45,11 @@ public class LevelGenerator : MonoBehaviour
 
     public void EraseSpawns()
     {
+        Door[] __doors = FindObjectsOfType<Door>();
+        foreach(Door __door in __doors)
+        {
+            __door.Reset();
+        }
         Spikes[] __spikes = FindObjectsOfType<Spikes>();
         foreach (Spikes __spike in __spikes)
         {
